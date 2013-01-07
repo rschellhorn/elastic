@@ -1,6 +1,7 @@
 package controllers
 
 import Helpers._
+import java.nio.file.Path
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.libs.iteratee._
 import play.api.libs.json._
@@ -19,19 +20,18 @@ object ElasticSearch {
         }.headOption.filterNot(_.isEmpty).map("/"+_)
     }
 
+    def asJson(entry: Path) = Json.obj(
+        "title"       -> (entry.xml\"general"\"title").bestValue,
+        "description" -> (entry.xml\"general"\"description").bestValue,
+        "keyword"     -> (entry.xml\"general"\"keyword").bestValues,
+        "context"     -> (entry.xml\"educational"\"context"\"value").map(_.text),
+        "costs"       -> ((entry.xml\"rights"\"cost"\"value").text == "yes"),
+        "duration"    -> (entry.xml\"educational"\"typicalLearningTime"\"duration").asDuration,
+        "repository"  -> entry.name.split(":").headOption
+    )
+
     def indexLoms() = storage.entries.take(1000).foreach { entry =>
-
-        val json = Json.obj(
-            "title"       -> (entry.xml\"general"\"title").bestValue,
-            "description" -> (entry.xml\"general"\"description").bestValue,
-            "keyword"     -> (entry.xml\"general"\"keyword").bestValues,
-            "context"     -> (entry.xml\"educational"\"context"\"value").map(_.text),
-            "costs"       -> ((entry.xml\"rights"\"cost"\"value").text == "yes"),
-            "duration"    -> (entry.xml\"educational"\"typicalLearningTime"\"duration").asDuration,
-            "repository"  -> entry.name.split(":").headOption
-        )
-
-        WS.url(s"${host}/edurep/lom/${entry.name}").post(json).map { response =>
+        WS.url(s"${host}/edurep/lom/${entry.name}").post(asJson(entry)).map { response =>
             channel.push(response.body)
         }
     }

@@ -1,105 +1,141 @@
-@(node: String)
+@(node: String, lom: scala.xml.Node, json: play.api.libs.json.JsValue)
+@import play.api.libs.json.Json
 <!DOCTYPE html>
 <html>
     <head>
         <title>Elasticsearch</title>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=1280" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="stylesheet" href="@routes.Assets.at("reveal.js/css/reveal.min.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("reveal.js/css/theme/default.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("reveal.js/lib/css/zenburn.css")">
+        <link rel="stylesheet" href="@routes.Assets.at("stylesheets/sheets.css")">
         <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.7.1.min.js")"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/tools.js")"></script>
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/edurep.js")"></script>
-        <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
-        <link href="@routes.Assets.at("stylesheets/impress.css")" rel="stylesheet">
-        <link href="@routes.Assets.at("stylesheets/elastic.css")" rel="stylesheet">
     </head>
-    <body>
-        <div id="impress">
+    <body data-url="@node">
+        <div class="reveal">
+            <div class="slides">
 
-            <div id="welcome" class="step">
-                <img src="@routes.Assets.at("images/header.png")" height="186" width="599">
-                <p>You know, for Search</p>
-            </div>
-
-            <div id="agenda" class="step" data-y="2000">
-                <h1>Agenda</h1>
-                <ol>
-                    <li>Vocabulary</li>
-                    <li>Full text search</li>
-                    <li>Case: Edurep</li>
-                    <li>Indexing data</li>
-                    <li>Searching</li>
-                </ol>
-            </div>
-
-            <div id="vocabulary" class="step" data-y="4000">
-                <dl>
-                    <dt>Database</dt><dd>Index</dd>
-                    <dt>Table</dt><dd>Type</dd>
-                    <dt>Row</dt><dd>Document</dd>
-                    <dt>Column</dt><dd>Field</dd>
-                </dl>
-            </div>
-
-            <div id="analyse" class="step" data-x="2000" data-y="4000">
-<pre class="elastic post" data-url="@node/_analyze?analyzer=dutch">
-Ik heb dan ook altijd opgemerkt dat mensen die zich met zoiets inlaten, gewoonlijk slecht wegkomen. Ik ben drieënveertig jaar oud, bezoek sedert twintig jaren de beurs, en kan dus voor de dag treden, als men iemand roept die ondervinding heeft. Ik heb al wat huizen zien vallen!
-</pre>
-            </div>
-
-            <div class="step" data-y="6000">
-                <p>Edurep: Zoekmachine van Kennisnet</p>
-                <dl>
-                    <dt><a href="@routes.Application.lom" target="lom">LOM</a></dt>
-                    <dd>LeerObject Metadata</dd>
-                </dl>
-            </div>
-           <div id="example" class="step" data-x="2000" data-y="6000">
-<pre class="command json highlight" data-url="@node/edurep/lom">
-{
-    "title": "Rozijnen",
-    "description": "Kleine, donkere, droge frummeltjes in een doosje. Iedereen kent ze wel: Rozijnen! Wil je meer weten over deze lekkernij? Maak dan snel deze les",
-    "keyword": [ "Krenten", "Druiven", "Krentenbol", "Brood", "Muesli", "Minipad" ],
-    "context": "PO",
-    "costs": false,
-    "duration": 1,
-    "repository": "acadin"
+                <section class="center">
+                    <h1><img src="@routes.Assets.at("images/header.png")" height="186" width="599"></h1>
+                </section>
+                <section id="agenda">
+                    <ul>
+                        <li>Elasticsearch</li>
+                        <li>Full text search</li>
+                        <li>Case: Edurep</li>
+                        <li>Hands on!</li>
+                    </ul>
+                </section>
+                <section id="elasticsearch">
+                    <h2>Elasticsearch.org</h2>
+                    <blockquote class="callout">
+                        <p>So we build a web site or an application and want to add search to it, and then it hits us: <strong>getting search working is hard</strong>. We want our search solution to be <strong><span class="fast">fast</span></strong>, we want a <strong><span class="painless">painless setup</span></strong> and a completely <strong><span class="schema">free search schema</span></strong>, we want to be able to index data simply using JSON over HTTP, we want our search server to be always available, we want to be able to start with one machine and scale to hundreds, we want real-time search, we want simple multi-tenancy, and we want a solution that is built for the cloud.</p>
+                        <cite><a href="http://www.elasticsearch.org/">elasticsearch.org</a></cite>
+                    </blockquote>
+                        <div class="fragment" data-activate=".fast">
+                            <p>...</p>
+                        </div>
+                        <div class="fragment" data-activate=".painless">
+                            <pre><code class="bash">$ wget http://.../elasticsearch-0.20.2.tar.gz
+$ tar -xf elasticsearch-0.20.2.tar.gz
+$ elasticsearch-0.20.2/bin/elasticsearch
+</code></pre>
+                        <div class="fragment" data-activate=".schema">
+                            ...
+                        </div>
+                        </div>
+                </section>
+                <section id="full-text-search">
+                    <h2>Full text search</h2>
+                    <blockquote class="callout">
+                        <p><span class="stop">Ik</span> <span class="stop">ben</span> makelaar <span class="stop">in</span> koffi, <span class="stop">en</span> <span class="verb">woon</span> <span class="stop">op</span> <span class="stop">de</span> <span class="case">Lauriergracht</span> No 37. <span class="stop">Het</span> <span class="stop">is</span> <span class="stop">mijn</span> gewoonte <span class="stop">niet</span>, <span class="importance">roman</span>s <span class="stop">te</span> schrijven, <span class="stop">of</span> zulke dingen, <span class="stop">en</span> <span class="stop">het</span> <span class="stop">heeft</span> <span class="stop">dan</span> <span class="stop">ook</span> lang geduurd, <span class="stop">voor</span> <span class="stop">ik</span> <span class="stop">er</span> toe overging <span class="stop">een</span> paar riem <span class="scoring">papier</span> extra <span class="stop">te</span> <span class="scoring">bestellen</span>, <span class="stop">en</span> <span class="stop">het</span> <span class="plural">werk</span> <span class="stop">aan</span> <span class="stop">te</span> vangen, <span class="stop">dat</span> gij, lieve lezer, <span class="diacritic">zoëven</span> <span class="stop">in</span> <span class="stop">de</span> hand hebt genomen, <span class="stop">en</span> <span class="stop">dat</span> <span class="stop">ge</span> lezen <span class="stop">moet</span> <span class="stop">als</span> <span class="stop">ge</span> makelaar <span class="stop">in</span> koffie zijt, <span class="stop">of</span> <span class="stop">als</span> <span class="stop">ge</span> <span class="stop">wat</span> anders zijt. <span class="stop">Niet</span> alleen <span class="stop">dat</span> <span class="stop">ik</span> nooit <span class="stop">iets</span> schreef <span class="stop">wat</span> <span class="stop">naar</span> <span class="stop">een</span> <span class="importance">roman</span> geleek, <span class="stop">maar</span> <span class="stop">ik</span> houd <span class="stop">er</span> zelfs <span class="stop">niet</span> <span class="stop">van</span>, <span class="stop">iets</span> dergelijks <span class="stop">te</span> lezen, <span class="stop">omdat</span> <span class="stop">ik</span> <span class="stop">een</span> man <span class="stop">van</span> zaken <span class="stop">ben</span>.</p>
+                        <cite>Max Havelaar (1860), Multatuli</cite>
+                    </blockquote>
+                    <ol>
+                        <li class="fragment" data-activate=".case">Hoofdlettergevoelig</li>
+                        <li class="fragment" data-activate=".verb">Vervoegingen (wonen, woonde)</li>
+                        <li class="fragment" data-activate=".plural">Enkelvoud/meervoud (werken)</li>
+                        <li class="fragment" data-activate=".diacritic">Ascii folding</li>
+                        <li class="fragment" data-activate=".importance">Scoring</li>
+                        <li class="fragment" data-activate=".scoring">Must (en) / should (of)</li>
+                        <li class="fragment" data-activate=".stop">Stopwoorden</li>
+                    </ol>
+                    <pre class="fragment analyze result">
+                        <code></code>
+                        <select name="analyzer">
+                            <option value="standard" selected="selected">Standaard</option>
+                            <option value="dutch">Nederlands</option>
+                        </select>
+                    </pre>
+                </section>
+                <section id="vocabulary">
+                    <dl>
+                        <dt>Database</dt><dd class="fragment">Index</dd>
+                        <dt class="fragment">Table</dt><dd class="fragment">Type</dd>
+                        <dt class="fragment">Row</dt><dd class="fragment">Document</dd>
+                        <dt class="fragment">Column</dt><dd class="fragment">Field</dd>
+                    </dl>
+                </section>
+                <section id="edurep">
+                    <h2>Edurep</h2>
+                    <p>Repository van LeerObject Metadata (LOM) onder beheer van <a href="http://www.kennisnet.nl" target="kennisnet">Kennisnet</a>.</p>
+                    <dl class="fragment">
+                        <dt>Techniek</dt>
+                        <dd><a href="http://lucene.apache.org/solr/" target="solr">Apache Solr</a></dd>
+                        <dd class="fragment"><a href="http://www.loc.gov/standards/sru/">Search/Retrieval via URL (SRU)</a></dd>
+                    </dl>
+                    <dl class="fragment">
+                        <dt>Omvang</dt>
+                        <dd><a href="http://wszoeken.edurep.kennisnet.nl:8000/edurep/sruns?operation=searchRetrieve&version=1.2&recordPacking=xml&query=edurep" target="edurep">~ 1.5M LOMs</a></dd>
+                    </dl>
+                    <dl class="fragment">
+                        <dt>Ervaring</dt>
+                        <dd><a href="http://www.wikiwijs.nl/sector/all/results.psml" target="wikiwijs">Wikiwijs</a>, e.a.</dd>
+                    </dl>
+                    <dl class="fragment">
+                        <dt>Dump</dt>
+                        <dd>Eind 2011</dd>
+                        <dd>~750k LOMs</dd>
+                    </dl>
+                </section>
+                <section id="lom" class="full">
+                    <pre class="result"><code class="xml">@lom.toString</code></pre>
+                    <pre class="fragment result json"><code>@Json.stringify(json)</code></pre>
+                </section>
+                <section id="search" class="full">
+<pre><code class="json" contenteditable>{
+  "query": {
+    "match_all": {}
+  }
 }
-</pre>
+</code></pre>
+                    <pre class="fragment result"><code></code></pre>
+                </section>
             </div>
-
-            <div id="mapping" class="step" data-x="6000" data-y="6000">
-<pre class="query" data-url="@node/edurep/lom/_mapping">
-curl -XGET @node/edurep/lom/_mapping
-</pre>
-            </div>
-
-            <div id="search_all" class="step" data-y="8000">
-<pre class="elastic json post" data-url="@node/edurep/lom/_search">
-{
-    "query": {
-        "match_all": {}
-    }
-}
-</pre>
-            </div>
-
-            <div id="facets" class="step" data-y="10000">
-<pre class="elastic json post" data-url="@node/edurep/lom/_search">
-{
-    "size": 0,
-    "query": {
-        "match_all": {}
-    },
-    "facets": {
-        "contexts": { "terms": { "field": "context", "all_terms": true } }
-    }
-}
-</pre>
-            </div>
-
         </div>
+        <script src="@routes.Assets.at("reveal.js/lib/js/head.min.js")"></script>
+        <script src="@routes.Assets.at("reveal.js/js/reveal.min.js")"></script>
+        <script>
+            Reveal.initialize({
+                center: false,
+                controls: false,
+                history: true,
+                overview: true,
+                progress: false,
+                rollingLinks: false,
+                dependencies: [
+                    {
+                        src: '@routes.Assets.at("reveal.js/plugin/highlight/highlight.js")',
+                        async: true,
+                        callback: function() {
+                            hljs.tabReplace = 2;
+                            hljs.initHighlightingOnLoad();
+                        }
+                    }
+                ]
+            });
+        </script>
+        <script src="@routes.Assets.at("javascripts/sheets.js")"></script>
     </body>
 </html>
-<script type="text/javascript" src="@routes.Assets.at("javascripts/impress.js")"></script>
-<script>impress().init();</script>

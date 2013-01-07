@@ -1,4 +1,4 @@
-function syntaxHighlight(json) {
+function highlight(json) {
     if (typeof json != 'string') {
         json = JSON.stringify(json, undefined, 2);
     }

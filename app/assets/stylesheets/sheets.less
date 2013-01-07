@@ -1,0 +1,93 @@
+.reveal {
+
+    .slides {
+        height: 90%;
+        max-width: 95%; width: 95%;
+
+        > section {
+            text-align: left;
+            padding: 40px 15%;
+            width: 70%;
+
+            span.active {
+                background: #FF5E99;
+                color: #FFF;
+                -webkit-transition: all .5s ease;
+            }
+
+            &.center {
+                text-align: center;
+            }
+
+            &.full {
+                height: 100%;
+                padding: 0;
+                width: 100%;
+            }
+
+            &#search {
+                pre { float: left; margin-right: 1%; width: 38%; }
+                pre+pre { float: left; width: 60%; }
+            }
+
+            &#lom {
+                &.second {
+                    pre { float: left; width: 49%; }
+                    pre+pre { float: right; width: 49%; }
+                }
+                pre { width: 100%; }
+            }
+
+            &#full-text-search {
+                &.full {
+                    h2 { display: none; }
+                    blockquote { float: left; width: 48%; }
+                }
+                ol {
+                    list-style: none; margin: 1em 0 0 0; width: 100%;
+                }
+                pre { position: absolute; right: 0; top: 0; width: 50%; }
+                select {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                }
+            }
+
+            .result {
+                height: 100%;
+                position: relative;
+                code { position: absolute; left: 0; right: 0; top: 0; bottom: 0; max-height: none; }
+            }
+        }
+    }
+
+    pre {
+        margin: 0;
+        code {
+            .key { color: #E3CEAB; }
+            .boolean, .null { color: #8CD0D3 }
+        }
+    }
+
+    blockquote.callout {
+        background: transparent;
+        border-left: 0.5em solid #DDD;
+        box-shadow: none;
+        margin-left: -1.5em;
+        padding: 0 0 0 1em;
+        width: auto;
+        &:before { content: "“"; display: block; font-size: 400%; height: 0; margin-left: -.95em; position: relative; top: 0.2em; }
+        &:after { content: ""; }
+        cite {
+            &:before { content: "\2014"; margin-right: 0.5em; }
+        }
+    }
+
+    dl {
+        overflow: hidden;
+        dt { clear: left; float: left; width: 250px; }
+        dd { margin-left: 250px; }
+        dd:before { content: "\2192"; margin-right: 1em; }
+    }
+}

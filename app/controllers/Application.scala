@@ -10,13 +10,14 @@ object Application extends Controller {
     def index = Action {
         Async {
             ElasticSearch.httpAddress.map { address =>
-                Ok(views.html.main(address.getOrElse("http://localhost:9200")))
+                val entry = storage.entries.head
+                Ok(views.html.main(
+                    node = address.getOrElse("http://localhost:9200"),
+                    lom = entry.xml,
+                    json = ElasticSearch.asJson(entry)
+                ))
             }
         }
-    }
-
-    def lom = Action {
-        Ok(storage.entries.head.xml)
     }
 
     def join = WebSocket.using[String] { request =>
