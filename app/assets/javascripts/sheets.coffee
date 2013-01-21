@@ -3,6 +3,9 @@ $ ->
     $('code.highlight').each ->
         $(this).html( highlight(JSON.parse($(this).text())) )
 
+    $('pre code').focusout (event) ->
+        $(this).html( highlight(JSON.parse($(this).text())) )
+
     $('#indexing button').click (event) ->
         slide = $(this).parents('section')
         code = $('code', slide).empty()
@@ -53,14 +56,6 @@ handler = (event) ->
             else
                 slide.removeClass('full')
 
-        when "search"
-            $.ajax
-                url: $('body').data('url') + '/edurep/lom/_search'
-                type: 'POST'
-                data: fragment.prev('pre').text()
-                success: (data) ->
-                    $('code', fragment).html( highlight(data) )
-
 Reveal.addEventListener 'fragmentshown', (event) ->
     fragment = $(event.fragment)
     state = fragment.data('state')
@@ -68,6 +63,14 @@ Reveal.addEventListener 'fragmentshown', (event) ->
     # handle global state class
     slide = fragment.parents('section')
     slide.addClass(state) if state
+
+    if slide.hasClass('search')
+        $.ajax
+            url: $('body').data('url') + '/edurep/lom/_search'
+            type: 'POST'
+            data: fragment.prev('pre').text()
+            success: (data) ->
+                $('code', fragment).html( highlight(data) )
 
     handler(event)
 

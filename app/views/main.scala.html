@@ -126,13 +126,80 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre>curl -XGET http://localhost:9200/edurep/lom/_mapping</pre>
                     <pre><code></code></pre>
                 </section>
-                <section id="search" class="full">
+                <section id="search" class="full search">
 <pre><code class="json" contenteditable>{
   "query": {
     "match_all": {}
   }
 }
 </code></pre>
+                    <pre class="fragment result"><code></code></pre>
+                </section>
+                <section id="search-match" class="full search">
+<pre><code contenteditable>{
+  "query": {
+    "match": {
+      "title": "Nederland"
+    }
+  }
+}</code></pre>
+                    <pre class="fragment result"><code></code></pre>
+                </section>
+                <section id="search-bool" class="full search">
+<pre><code contenteditable>{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "title": "Nederland"
+          }
+        },
+        {
+          "match": {
+            "description": "oranje"
+          }
+        }
+      ]
+    }
+  }
+}</code></pre>
+                    <pre class="fragment result"><code></code></pre>
+                </section>
+                <section id="search-all" class="full search">
+<pre><code contenteditable>{
+  "query": {
+    "match": {
+      "_all": {
+        "query": "Nederland oranje",
+        "operator": "and"
+      }
+    }
+  }
+}</code></pre>
+                    <pre class="fragment result"><code></code></pre>
+                </section>
+                <section id="search-term" class="full search">
+<pre><code contenteditable>{
+  "query": {
+    "term": {
+      "costs": false
+    }
+  }
+}</code></pre>
+                    <pre class="fragment result"><code></code></pre>
+                </section>
+                <section id="search-range" class="full search">
+<pre><code contenteditable>{
+  "query": {
+    "range": {
+      "duration": {
+        "from": 1,
+        "to": 8
+      }
+    }
+  }
+}</code></pre>
                     <pre class="fragment result"><code></code></pre>
                 </section>
             </div>
