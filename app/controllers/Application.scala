@@ -7,17 +7,20 @@ import play.api.mvc._
 
 object Application extends Controller {
 
-    def index = Action {
+    def index = Action { implicit request =>
         Async {
             ElasticSearch.httpAddress.map { address =>
                 val entry = storage.entries.head
                 Ok(views.html.main(
                     node = address.getOrElse("http://localhost:9200"),
-                    lom = entry.xml,
-                    json = ElasticSearch.asJson(entry)
+                    lom = entry.xml
                 ))
             }
         }
+    }
+
+    def lom = Action {
+        Ok(ElasticSearch.asJson(storage.entries.head))
     }
 
     def join = WebSocket.using[String] { request =>

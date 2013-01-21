@@ -1,12 +1,31 @@
+$ ->
+
+    $('#indexing button').click (event) ->
+        slide = $(this).parents('section')
+        code = $('code', slide).empty()
+
+        socket = new WebSocket(slide.data('url'))
+
+        socket.onopen = (event) ->
+            socket.send('index')
+
+        socket.onmessage = (event) ->
+            current = code.text()
+            code.text(event.data + '\n' + current)
+
 handler = (event) ->
 
     fragment = $(event.fragment)
     slide = fragment.parents('section')
 
-    if fragment.data('activate')
-        $('.active', slide).removeClass('active')
-        $($('.fragment.visible:last', slide).data('activate'), quote).addClass('active')
-        fragment.addClass('active')
+    if slide.hasClass('bullets')
+        $('.fragment.visible', slide).addClass('other')
+        $('.fragment.visible:last', slide).removeClass('other')
+
+        if fragment.data('activate')
+            $('.active', slide).removeClass('active')
+            selector = $('.fragment.visible:last', slide).data('activate')
+            $(selector, quote).addClass('active')
 
     switch slide.attr('id')
 
@@ -31,11 +50,6 @@ handler = (event) ->
             else
                 slide.removeClass('full')
 
-        when "lom"
-            slide.removeClass('second')
-            if fragment.hasClass('json') and event.type is 'fragmentshown'
-                slide.addClass('second')
-
         when "search"
             $.ajax
                 url: $('body').data('url') + '/edurep/lom/_search'
@@ -44,5 +58,28 @@ handler = (event) ->
                 success: (data) ->
                     $('code', fragment).html( highlight(data) )
 
-Reveal.addEventListener 'fragmentshown', handler
-Reveal.addEventListener 'fragmenthidden', handler
+        when "lom"
+            $.ajax
+                url: fragment.data('url')
+                success: (data) ->
+                    $('code', fragment).html( highlight(data) )
+
+Reveal.addEventListener 'fragmentshown', (event) ->
+    fragment = $(event.fragment)
+    state = fragment.data('state')
+
+    # handle global state class
+    slide = fragment.parents('section')
+    slide.addClass(state) if state
+
+    handler(event)
+
+Reveal.addEventListener 'fragmenthidden', (event) ->
+    fragment = $(event.fragment)
+    slide = fragment.parents('section')
+    state = fragment.data('state')
+    slide.removeClass(state) if state
+    handler(event)
+
+Reveal.addEventListener 'slidechanged', (event) ->
+    slide = $(event.currentSlide)

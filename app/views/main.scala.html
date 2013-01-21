@@ -1,5 +1,4 @@
-@(node: String, lom: scala.xml.Node, json: play.api.libs.json.JsValue)
-@import play.api.libs.json.Json
+@(node: String, lom: scala.xml.Node)(implicit request: RequestHeader)
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,37 +15,54 @@
         <div class="reveal">
             <div class="slides">
 
-                <section class="center">
+                <section id="home">
                     <h1><img src="@routes.Assets.at("images/header.png")" height="186" width="599"></h1>
+                    <ol>
+                        <li>Rob Schellhorn</li>
+                    </ol>
+                    <ol class="fragment fade-in">
+                        <li><a href="https://www.google.nl/#hl=en&tbo=d&output=search&sclient=psy-ab&q=finalist&oq=finalist&gs_l=hp.3..0l4.77313.78435.0.78655.8.8.0.0.0.0.74.487.8.8.0.les%3B..0.0...1c.1.cgVkIv94sHI&pbx=1&bav=on.2,or.r_gc.r_pw.r_cp.r_qf.&bvm=bv.41248874,d.d2k&fp=ad58aa7848033ec4&biw=1680&bih=952" target="google">www.google.nl</a></li>
+                        <li class="fragment fade-in"><a href="http://www.funda.nl/koop/gorinchem/straat-zwaanswal/" target="funda">www.funda.nl</a></li>
+                    </ol>
+                    <ol class="fragment fade-in">
+                        <li>Wat is Elasticsearch?</li>
+                        <li class="fragment fade-in">Full text search</li>
+                        <li class="fragment fade-in">Case: Edurep</li>
+                        <li class="fragment fade-in">Hands on!</li>
+                    </ol>
                 </section>
-                <section id="agenda">
-                    <ul>
-                        <li>Elasticsearch</li>
-                        <li>Full text search</li>
-                        <li>Case: Edurep</li>
-                        <li>Hands on!</li>
-                    </ul>
-                </section>
-                <section id="elasticsearch">
-                    <h2>Elasticsearch.org</h2>
+                <section id="elasticsearch" class="bullets">
                     <blockquote class="callout">
-                        <p>So we build a web site or an application and want to add search to it, and then it hits us: <strong>getting search working is hard</strong>. We want our search solution to be <strong><span class="fast">fast</span></strong>, we want a <strong><span class="painless">painless setup</span></strong> and a completely <strong><span class="schema">free search schema</span></strong>, we want to be able to index data simply using JSON over HTTP, we want our search server to be always available, we want to be able to start with one machine and scale to hundreds, we want real-time search, we want simple multi-tenancy, and we want a solution that is built for the cloud.</p>
+                        <p>So we build a web site or an application and want to add search to it, and then it hits us: <strong>getting search working is hard</strong>. We want our search solution to be <strong><span class="fast">fast</span></strong>, we want a <strong><span class="painless">painless setup</span></strong> and a completely <strong><span class="schema">free search schema</span></strong>, we want to be able to index data simply using <strong><span class="protocol">JSON over HTTP</span></strong>, we want our search server to be <strong><span class="scaling">always available</span></strong>, we want to be able to start with one machine and <strong><span class="scaling">scale to hundreds</span></strong>, we want <strong><span class="fast">real-time search</span></strong>, we want simple <strong><span class="schema">multi-tenancy</span></strong>, and we want a solution that is <span class="cloud">built for the cloud</span>.</p>
                         <cite><a href="http://www.elasticsearch.org/">elasticsearch.org</a></cite>
                     </blockquote>
-                        <div class="fragment" data-activate=".fast">
-                            <p>...</p>
-                        </div>
-                        <div class="fragment" data-activate=".painless">
-                            <pre><code class="bash">$ wget http://.../elasticsearch-0.20.2.tar.gz
+                    <div class="fragment" data-activate=".fast"></div>
+                    <div class="fragment" data-activate=".painless">
+                        <pre><code class="bash">$ wget http://.../elasticsearch-0.20.2.tar.gz
 $ tar -xf elasticsearch-0.20.2.tar.gz
 $ elasticsearch-0.20.2/bin/elasticsearch
 </code></pre>
-                        <div class="fragment" data-activate=".schema">
-                            ...
-                        </div>
-                        </div>
+                    </div>
+                    <div class="fragment" data-activate=".schema">
+                        <p>string, integer/long, float/double, boolean, null, array en object</p>
+                    </div>
+                    <div class="fragment" data-activate=".protocol">
+                        <p>http://localhost:9200/{index}/{type}</p>
+                    </div>
+                    <div class="fragment" data-activate=".scaling">
+                        <ol>
+                            <li>Makelijk te clusteren</li>
+                            <li>Data-replicatie</li>
+                        </ol>
+                    </div>
+                    <div class="fragment" data-activate=".cloud">
+                        <ol>
+                            <li><a href="http://www.elasticsearch.org/tutorials/2011/08/22/elasticsearch-on-ec2.html" target="ec2">EC2</a></li>
+                            <li><a href="https://addons.heroku.com/bonsai" target="heroku">Heroku</a></li>
+                        </ol>
+                    </div>
                 </section>
-                <section id="full-text-search">
+                <section id="full-text-search" class="bullets">
                     <h2>Full text search</h2>
                     <blockquote class="callout">
                         <p><span class="stop">Ik</span> <span class="stop">ben</span> makelaar <span class="stop">in</span> koffi, <span class="stop">en</span> <span class="verb">woon</span> <span class="stop">op</span> <span class="stop">de</span> <span class="case">Lauriergracht</span> No 37. <span class="stop">Het</span> <span class="stop">is</span> <span class="stop">mijn</span> gewoonte <span class="stop">niet</span>, <span class="importance">roman</span>s <span class="stop">te</span> schrijven, <span class="stop">of</span> zulke dingen, <span class="stop">en</span> <span class="stop">het</span> <span class="stop">heeft</span> <span class="stop">dan</span> <span class="stop">ook</span> lang geduurd, <span class="stop">voor</span> <span class="stop">ik</span> <span class="stop">er</span> toe overging <span class="stop">een</span> paar riem <span class="scoring">papier</span> extra <span class="stop">te</span> <span class="scoring">bestellen</span>, <span class="stop">en</span> <span class="stop">het</span> <span class="plural">werk</span> <span class="stop">aan</span> <span class="stop">te</span> vangen, <span class="stop">dat</span> gij, lieve lezer, <span class="diacritic">zoëven</span> <span class="stop">in</span> <span class="stop">de</span> hand hebt genomen, <span class="stop">en</span> <span class="stop">dat</span> <span class="stop">ge</span> lezen <span class="stop">moet</span> <span class="stop">als</span> <span class="stop">ge</span> makelaar <span class="stop">in</span> koffie zijt, <span class="stop">of</span> <span class="stop">als</span> <span class="stop">ge</span> <span class="stop">wat</span> anders zijt. <span class="stop">Niet</span> alleen <span class="stop">dat</span> <span class="stop">ik</span> nooit <span class="stop">iets</span> schreef <span class="stop">wat</span> <span class="stop">naar</span> <span class="stop">een</span> <span class="importance">roman</span> geleek, <span class="stop">maar</span> <span class="stop">ik</span> houd <span class="stop">er</span> zelfs <span class="stop">niet</span> <span class="stop">van</span>, <span class="stop">iets</span> dergelijks <span class="stop">te</span> lezen, <span class="stop">omdat</span> <span class="stop">ik</span> <span class="stop">een</span> man <span class="stop">van</span> zaken <span class="stop">ben</span>.</p>
@@ -69,21 +85,13 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                         </select>
                     </pre>
                 </section>
-                <section id="vocabulary">
-                    <dl>
-                        <dt>Database</dt><dd class="fragment">Index</dd>
-                        <dt class="fragment">Table</dt><dd class="fragment">Type</dd>
-                        <dt class="fragment">Row</dt><dd class="fragment">Document</dd>
-                        <dt class="fragment">Column</dt><dd class="fragment">Field</dd>
-                    </dl>
-                </section>
                 <section id="edurep">
                     <h2>Edurep</h2>
                     <p>Repository van LeerObject Metadata (LOM) onder beheer van <a href="http://www.kennisnet.nl" target="kennisnet">Kennisnet</a>.</p>
                     <dl class="fragment">
                         <dt>Techniek</dt>
                         <dd><a href="http://lucene.apache.org/solr/" target="solr">Apache Solr</a></dd>
-                        <dd class="fragment"><a href="http://www.loc.gov/standards/sru/">Search/Retrieval via URL (SRU)</a></dd>
+                        <dd class="fragment"><a href="http://www.loc.gov/standards/sru/" target="sru">Search/Retrieval via URL (SRU)</a></dd>
                     </dl>
                     <dl class="fragment">
                         <dt>Omvang</dt>
@@ -101,7 +109,13 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 </section>
                 <section id="lom" class="full">
                     <pre class="result"><code class="xml">@lom.toString</code></pre>
-                    <pre class="fragment result json"><code>@Json.stringify(json)</code></pre>
+                    <pre class="fragment result" data-state="json" data-url="@routes.Application.lom"><code></code></pre>
+                </section>
+                <section id="indexing" class="full" data-url="@routes.Application.join().webSocketURL()">
+                    <pre class="result">
+                        <code></code>
+                        <button>Index</button>
+                    </pre>
                 </section>
                 <section id="search" class="full">
 <pre><code class="json" contenteditable>{

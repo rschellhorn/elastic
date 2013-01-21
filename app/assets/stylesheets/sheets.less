@@ -9,10 +9,13 @@
             padding: 40px 15%;
             width: 70%;
 
-            span.active {
-                background: #FF5E99;
-                color: #FFF;
-                -webkit-transition: all .5s ease;
+            pre { width: auto; }
+
+            &.bullets {
+                .fragment {
+                    margin-top: 1em;
+                    &.other { display: none; }
+                }
             }
 
             &.center {
@@ -25,17 +28,30 @@
                 width: 100%;
             }
 
+            &#home {
+                h1 { left: 50%; margin-left: -300px; position: relative; }
+                ol { float: left; list-style: none;  margin: 0; width: 33%; }
+            }
+
             &#search {
                 pre { float: left; margin-right: 1%; width: 38%; }
                 pre+pre { float: left; width: 60%; }
             }
 
             &#lom {
-                &.second {
+                &.json {
                     pre { float: left; width: 49%; }
                     pre+pre { float: right; width: 49%; }
                 }
                 pre { width: 100%; }
+            }
+
+            &#indexing {
+                button {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                }
             }
 
             &#full-text-search {
@@ -52,6 +68,12 @@
                     top: 0;
                     right: 0;
                 }
+            }
+
+            span.active {
+                background: #FF5E99;
+                color: #FFF;
+                -webkit-transition: all .5s ease;
             }
 
             .result {
