@@ -202,6 +202,54 @@ $ elasticsearch-0.20.2/bin/elasticsearch
 }</code></pre>
                     <pre class="fragment result"><code></code></pre>
                 </section>
+                <section id="search-filters" class="full search">
+<pre><code contenteditable>{
+  "query": {
+    "match": {
+      "title": "Nederland"
+    }
+  },
+  "filter": {
+    "range": {
+      "duration": {
+        "from": 1,
+        "to": 8
+      }
+    }
+  }
+}</code></pre>
+                    <pre class="fragment result"><code></code></pre>
+                </section>
+                <section id="search-paging" class="full search">
+<pre><code contenteditable>{
+  "query": {
+    "match": {
+      "title": "Nederland"
+    }
+  },
+  "from": 3,
+  "size": 2
+}</code></pre>
+                    <pre class="fragment result"><code></code></pre>
+                </section>
+                <section id="search-paging" class="full search">
+<pre><code contenteditable>{
+  "query": {
+    "match": {
+      "title": "Nederland"
+    }
+  },
+  "size": 0,
+  "facets": {
+    "contexts": {
+      "terms": {
+        "field": "context"
+      }
+    }
+  }
+}</code></pre>
+                    <pre class="fragment result"><code></code></pre>
+                </section>
             </div>
         </div>
         <script src="@routes.Assets.at("reveal.js/lib/js/head.min.js")"></script>
