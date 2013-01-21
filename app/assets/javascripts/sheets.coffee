@@ -1,5 +1,8 @@
 $ ->
 
+    $('code.highlight').each ->
+        $(this).html( highlight(JSON.parse($(this).text())) )
+
     $('#indexing button').click (event) ->
         slide = $(this).parents('section')
         code = $('code', slide).empty()
@@ -58,12 +61,6 @@ handler = (event) ->
                 success: (data) ->
                     $('code', fragment).html( highlight(data) )
 
-        when "lom"
-            $.ajax
-                url: fragment.data('url')
-                success: (data) ->
-                    $('code', fragment).html( highlight(data) )
-
 Reveal.addEventListener 'fragmentshown', (event) ->
     fragment = $(event.fragment)
     state = fragment.data('state')
@@ -83,3 +80,11 @@ Reveal.addEventListener 'fragmenthidden', (event) ->
 
 Reveal.addEventListener 'slidechanged', (event) ->
     slide = $(event.currentSlide)
+
+    switch slide.attr('id')
+
+        when 'mapping'
+            $.ajax
+                url: $('body').data('url') + '/edurep/lom/_mapping'
+                success: (data) ->
+                    $('code', slide).html( highlight(data) )

@@ -1,5 +1,4 @@
 GET     /                           controllers.Application.index
-GET     /lom                        controllers.Application.lom
 GET     /join                       controllers.Application.join
 
 # Map static resources from the /public folder to the /assets URL path

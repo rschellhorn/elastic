@@ -1,4 +1,4 @@
-@(node: String, lom: scala.xml.Node)(implicit request: RequestHeader)
+@(node: String, lom: scala.xml.Node, lomAsJson: play.api.libs.json.JsValue)(implicit request: RequestHeader)
 <!DOCTYPE html>
 <html>
     <head>
@@ -56,10 +56,11 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                         </ol>
                     </div>
                     <div class="fragment" data-activate=".cloud">
-                        <ol>
+                        <ul>
                             <li><a href="http://www.elasticsearch.org/tutorials/2011/08/22/elasticsearch-on-ec2.html" target="ec2">EC2</a></li>
                             <li><a href="https://addons.heroku.com/bonsai" target="heroku">Heroku</a></li>
-                        </ol>
+                            <li>&hellip;</li>
+                        </ul>
                     </div>
                 </section>
                 <section id="full-text-search" class="bullets">
@@ -109,13 +110,21 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 </section>
                 <section id="lom" class="full">
                     <pre class="result"><code class="xml">@lom.toString</code></pre>
-                    <pre class="fragment result" data-state="json" data-url="@routes.Application.lom"><code></code></pre>
+                    <pre class="fragment result" data-state="json"><code class="highlight">@lomAsJson</code></pre>
+                </section>
+                <section id="indexing-lom" class="full">
+                    <pre class="result"><code class="highlight">@lomAsJson</code></pre>
+                    <div class="fragment" data-state="second"><p class="before">curl -XPOST http://localhost:9200/edurep/lom -d '</p></div>
                 </section>
                 <section id="indexing" class="full" data-url="@routes.Application.join().webSocketURL()">
                     <pre class="result">
                         <code></code>
                         <button>Index</button>
                     </pre>
+                </section>
+                <section id="mapping">
+                    <pre>curl -XGET http://localhost:9200/edurep/lom/_mapping</pre>
+                    <pre><code></code></pre>
                 </section>
                 <section id="search" class="full">
 <pre><code class="json" contenteditable>{
