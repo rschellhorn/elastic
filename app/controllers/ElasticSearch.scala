@@ -3,13 +3,10 @@ package controllers
 import Helpers._
 import java.nio.file.Path
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.libs.iteratee._
 import play.api.libs.json._
 import play.api.libs.ws.WS
 
 object ElasticSearch {
-
-    val (events, channel) = Concurrent.broadcast[String]
 
     case class Node(name: String, version: String, http_address: String)
     implicit val nodeReads = Json.reads[Node]
@@ -34,13 +31,13 @@ object ElasticSearch {
         val id = (hit\"_id").as[String]
         val source = (hit\"_source")
         WS.url(s"${host}/edurep2/lom/${id}").post(source).map { response =>
-            channel.push(response.body)
+            println(response.body)
         }
     }
 
     def indexLoms() = storage.entries.take(10000).foreach { entry =>
         WS.url(s"${host}/edurep/lom/${entry.name}").post(asJson(entry)).map { response =>
-            channel.push(response.body)
+            println(response.body)
         }
     }
 }

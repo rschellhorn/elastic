@@ -2,7 +2,6 @@ package controllers
 
 import Helpers._
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.libs.iteratee._
 import play.api.mvc._
 
 object Application extends Controller {
@@ -28,16 +27,5 @@ object Application extends Controller {
     def index2 = Action {
         query().foreach(ElasticSearch.index2)
         Ok
-    }
-
-    def join = WebSocket.using[String] { request =>
-        val input = Iteratee.foreach[String] { msg =>
-            msg match {
-                case "index" => ElasticSearch.indexLoms()
-                case _ =>
-            }
-        }
-
-        (input, ElasticSearch.events)
     }
 }
