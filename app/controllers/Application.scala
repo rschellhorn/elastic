@@ -20,6 +20,11 @@ object Application extends Controller {
         }
     }
 
+    def index2 = Action {
+        query().foreach(ElasticSearch.index2)
+        Ok
+    }
+
     def join = WebSocket.using[String] { request =>
         val input = Iteratee.foreach[String] { msg =>
             msg match {

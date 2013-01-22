@@ -30,7 +30,15 @@ object ElasticSearch {
         "repository"  -> entry.name.split(":").headOption
     )
 
-    def indexLoms() = storage.entries.take(1000).foreach { entry =>
+    def index2(hit: JsValue) = {
+        val id = (hit\"_id").as[String]
+        val source = (hit\"_source")
+        WS.url(s"${host}/edurep2/lom/${id}").post(source).map { response =>
+            channel.push(response.body)
+        }
+    }
+
+    def indexLoms() = storage.entries.take(10000).foreach { entry =>
         WS.url(s"${host}/edurep/lom/${entry.name}").post(asJson(entry)).map { response =>
             channel.push(response.body)
         }

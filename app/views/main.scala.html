@@ -232,8 +232,106 @@ $ elasticsearch-0.20.2/bin/elasticsearch
 }</code></pre>
                     <pre class="fragment result"><code></code></pre>
                 </section>
-                <section id="search-paging" class="full search">
-<pre><code contenteditable>{
+                <section id="search-facets-terms" class="full search">
+<pre><code class="highlight" contenteditable>{
+  "query": {
+    "match": {
+      "title": "Nederland"
+    }
+  },
+  "size": 0,
+  "facets": {
+    "costs": {
+      "terms": {
+        "field": "costs"
+      }
+    }
+  }
+}</code></pre>
+                    <pre class="fragment result"><code></code></pre>
+                </section>
+                <section id="search-facets-range" class="full search">
+<pre><code class="highlight" contenteditable>{
+  "query": {
+    "match_all": {}
+  },
+  "size": 0,
+  "facets": {
+    "durations": {
+      "range": {
+        "field": "duration",
+        "ranges" : [
+          { "to" : 8 },
+          { "from" : 8, "to" : 40 },
+          { "from" : 40 }
+        ]
+      }
+    }
+  }
+}</code></pre>
+                    <pre class="fragment result"><code></code></pre>
+                </section>
+                <section id="search-facets-terms2" class="full search">
+<pre><code class="highlight" contenteditable>{
+  "query": {
+    "match": {
+      "title": "Nederland"
+    }
+  },
+  "size": 0,
+  "facets": {
+    "contexts": {
+      "terms": {
+        "field": "context"
+      }
+    }
+  }
+}</code></pre>
+                    <pre class="fragment result"><code></code></pre>
+                </section>
+                <section id="put-mapping" class="scripts">
+<pre><code>curl -XPOST http://localhost:9200/edurep2 -d '</code><code class="data highlight">{
+  "mappings": {
+    "lom": {
+      "properties": {
+        "context": {
+          "type": "string",
+          "index" : "not_analyzed"
+        },
+        "costs": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "long"
+        },
+        "keyword": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}</code><code>'</code><code class="result"></code><button class="put">Go</button></pre>
+<pre class="fragment"><code>reindex</code><button class="reindex" data-url="@routes.Application.index2">Go</button></pre>
+                </section>
+                <section id="alias" class="scripts">
+<pre><code>curl -XDELETE http://localhost:9200/edurep</code><code class="result"></code><button class="delete">Go</button></pre>
+<pre class="fragment"><code>curl -XPOST http://localhost:9200/_aliases -d '</code><code class="data highlight">{
+  "actions": [
+    { "add" : { "index" : "edurep2", "alias" : "edurep" } }
+  ]
+}</code><code>'</code><code class="result"></code><button class="alias">Go</button></pre>
+                </section>
+                <section id="search-facets-terms3" class="full search">
+<pre><code class="highlight" contenteditable>{
   "query": {
     "match": {
       "title": "Nederland"

@@ -19,6 +19,37 @@ $ ->
             current = code.text()
             code.text(event.data + '\n' + current)
 
+    $('#put-mapping button.put').click (event) ->
+        block = $(this).parents('pre')
+        $.ajax
+            url: $('body').data('url') + '/edurep2'
+            type: 'POST'
+            data: $('code.data', block).text()
+            success: (data) ->
+                $('code.result', block).html( highlight(data) )
+
+    $('#put-mapping button.reindex').click (event) ->
+        $.ajax
+            url: $(this).data('url')
+            type: 'POST'
+
+    $('#alias button.delete').click (event) ->
+        slide = $(this).parents('section')
+        $.ajax
+            url: $('body').data('url') + '/edurep'
+            type: 'DELETE'
+            success: (data) ->
+                $('code.result', slide).html( highlight(data) )
+
+    $('#alias button.alias').click (event) ->
+        pre = $(this).parents('pre')
+        $.ajax
+            url: $('body').data('url') + '/_aliases'
+            type: 'POST'
+            data: $('code.data', pre).text()
+            success: (data) ->
+                $('code.result', pre).html( highlight(data) )
+
 handler = (event) ->
 
     fragment = $(event.fragment)
