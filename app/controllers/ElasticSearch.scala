@@ -27,10 +27,10 @@ object ElasticSearch {
         "repository"  -> entry.name.split(":").headOption
     )
 
-    def index2(hit: JsValue) = {
+    def reindex(hit: JsValue, index: String) = {
         val id = (hit\"_id").as[String]
         val source = (hit\"_source")
-        WS.url(s"${host}/edurep2/lom/${id}").post(source).map { response =>
+        WS.url(s"${host}/${index}/lom/${id}").post(source).map { response =>
             println(response.body)
         }
     }

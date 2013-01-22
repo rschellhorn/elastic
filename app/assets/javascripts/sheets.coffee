@@ -47,20 +47,53 @@ $ ->
             type: 'POST'
             data: $('code.data', block).text()
             success: (data) ->
-                $('code.result', block).html( highlight(data) )
+                $('code.result', block).html( highlight(data) ).addClass('visible')
 
-    $('#put-mapping button.reindex').click (event) ->
+    $('#put-mapping2 button.put').click (event) ->
+        block = $(this).parents('pre')
+        $.ajax
+            url: $('body').data('url') + '/edurep3'
+            type: 'POST'
+            data: $('code.data', block).text()
+            success: (data) ->
+                $('code.result', block).html( highlight(data) ).addClass('visible')
+
+    $('#reindex button').click (event) ->
+        block = $(this).parents('pre')
         $.ajax
             url: $(this).data('url')
             type: 'POST'
+            beforeSend: ->
+                $('code.result', block).addClass('visible')
+            success: (data) ->
+                $('code.result', block).html(data)
+
+    $('#reindex2 button.reindex').click (event) ->
+        block = $(this).parents('pre')
+        $.ajax
+            url: $(this).data('url')
+            type: 'POST'
+            beforeSend: ->
+                $('code.result', block).addClass('visible')
+            success: (data) ->
+                $('code.result', block).html(data)
+
+    $('#reindex2  button.alias').click (event) ->
+        pre = $(this).parents('pre')
+        $.ajax
+            url: $('body').data('url') + '/_aliases'
+            type: 'POST'
+            data: $('code.data', pre).text()
+            success: (data) ->
+                $('code.result', pre).html( highlight(data) ).addClass('visible')
 
     $('#alias button.delete').click (event) ->
-        slide = $(this).parents('section')
+        block = $(this).parents('pre')
         $.ajax
             url: $('body').data('url') + '/edurep'
             type: 'DELETE'
             success: (data) ->
-                $('code.result', slide).html( highlight(data) )
+                $('code.result', block).html( highlight(data) ).addClass('visible')
 
     $('#alias button.alias').click (event) ->
         pre = $(this).parents('pre')
@@ -69,7 +102,7 @@ $ ->
             type: 'POST'
             data: $('code.data', pre).text()
             success: (data) ->
-                $('code.result', pre).html( highlight(data) )
+                $('code.result', pre).html( highlight(data) ).addClass('visible')
 
 handler = (event) ->
 

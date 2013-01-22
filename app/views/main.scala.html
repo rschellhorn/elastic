@@ -307,7 +307,8 @@ $ elasticsearch-0.20.2/bin/elasticsearch
           "type": "string"
         },
         "repository": {
-          "type": "string"
+          "type": "string",
+          "index" : "not_analyzed"
         },
         "title": {
           "type": "string"
@@ -316,7 +317,9 @@ $ elasticsearch-0.20.2/bin/elasticsearch
     }
   }
 }</code><code>'</code><code class="result"></code><button class="put">Go</button></pre>
-<pre class="fragment"><code>Herindexeer edurep &rarr; edurep2</code><button class="reindex" data-url="@routes.Application.index2">Go</button></pre>
+                </section>
+                <section id="reindex" class="scripts">
+                    <pre><code>Herindexeer edurep &rarr; edurep2</code><code class="result"></code><button data-url="@routes.Application.reindex("edurep2")">Go</button></pre>
                 </section>
                 <section id="alias" class="scripts">
 <pre><code>curl -XDELETE http://localhost:9200/edurep</code><code class="result"></code><button class="delete">Go</button></pre>
@@ -362,19 +365,48 @@ $ elasticsearch-0.20.2/bin/elasticsearch
           "type": "long"
         },
         "keyword": {
-          "type": "string"
+          "type": "string",
+          "analyzer": "dutch",
+          "boost": 4
         },
         "repository": {
-          "type": "string"
+          "type": "string",
+          "index" : "not_analyzed"
         },
         "title": {
           "type": "string",
-          "analyzer": "dutch"
+          "analyzer": "dutch",
+          "boost": 2
         }
       }
     }
   }
 }</code><code>'</code><code class="result"></code><button class="put">Go</button></pre>
+                </section>
+                <section id="reindex2" class="scripts">
+                    <pre><code>Herindexeer edurep &rarr; edurep3</code><code class="result"></code><button class="reindex" data-url="@routes.Application.reindex("edurep3")">Go</button></pre>
+                    <pre class="fragment"><code>curl -XPOST http://localhost:9200/_aliases -d '</code><code class="data highlight">{
+  "actions": [
+    { "remove" : { "index" : "edurep2", "alias" : "edurep" } },
+    { "add" : { "index" : "edurep3", "alias" : "edurep" } }
+  ]
+}</code><code>'</code><code class="result"></code><button class="alias">Go</button></pre>
+                </section>
+                <section id="search-facets-terms4" class="full search">
+<pre><code class="highlight" contenteditable>{
+  "query": {
+    "match_all": {}
+  },
+  "size": 0,
+  "facets": {
+    "words": {
+      "terms": {
+        "fields": [ "title", "description" ]
+      }
+    }
+  }
+}</code></pre>
+                    <pre class="fragment result"><code></code></pre>
                 </section>
             </div>
         </div>
@@ -387,7 +419,17 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 history: true,
                 overview: true,
                 progress: false,
-                rollingLinks: false
+                rollingLinks: false,
+                dependencies: [
+                    {
+                        src: '@routes.Assets.at("reveal.js/plugin/highlight/highlight.js")',
+                        async: true,
+                        callback: function() {
+                            hljs.tabReplace = 2;
+                            $('code.xml').html( hljs.highlightAuto($('code.xml').text()).value )
+                        }
+                    }
+                ]
             });
         </script>
         <script src="@routes.Assets.at("javascripts/sheets.js")"></script>

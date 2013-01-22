@@ -24,8 +24,8 @@ object Application extends Controller {
         Ok("done")
     }
 
-    def index2 = Action {
-        query().foreach(ElasticSearch.index2)
-        Ok
+    def reindex(target: String) = Action {
+        query().foreach(hit => ElasticSearch.reindex(hit, target))
+        Ok("done")
     }
 }
