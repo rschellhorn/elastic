@@ -98,6 +98,22 @@
         }
     }
 
+    code {
+        max-height: 600px;
+        &.result {
+            display: none;
+            &:before {
+                border-top: 1px dotted grey;
+                content: "Resultaat:";
+                display: block;
+                margin-bottom: 0.5em;
+            }
+            &.visible {
+                display: block;
+            }
+        }
+    }
+
     pre {
         margin: 0;
         button {

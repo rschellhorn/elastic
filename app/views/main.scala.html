@@ -112,22 +112,17 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="result"><code class="xml">@lom.toString</code></pre>
                     <pre class="fragment result" data-state="json"><code class="highlight">@lomAsJson</code></pre>
                 </section>
-                <section id="indexing-lom" class="full">
-                    <pre class="result"><code class="highlight">@lomAsJson</code></pre>
-                    <div class="fragment" data-state="second"><p class="before">curl -XPOST http://localhost:9200/edurep/lom -d '</p></div>
+                <section id="indexing-lom">
+                    <pre><code>curl -XPOST http://localhost:9200/edurep/lom -d '</code><code class="data highlight">@lomAsJson</code><code>'</code><code class="result"></code><button>Go</button></pre>
                 </section>
-                <section id="indexing" class="full" data-url="@routes.Application.join().webSocketURL()">
-                    <pre class="result">
-                        <code></code>
-                        <button>Index</button>
-                    </pre>
+                <section id="indexing">
+                    <pre><code>Index</code><code class="result"></code><button data-url="@routes.Application.index()">Go</button></pre>
                 </section>
                 <section id="mapping">
-                    <pre>curl -XGET http://localhost:9200/edurep/lom/_mapping</pre>
-                    <pre><code></code></pre>
+                    <pre><code>curl -XGET http://localhost:9200/edurep/lom/_mapping</code><code class="result"></code><button>Go</button></pre>
                 </section>
                 <section id="search" class="full search">
-<pre><code class="json" contenteditable>{
+<pre><code class="highlight" contenteditable>{
   "query": {
     "match_all": {}
   }
@@ -136,7 +131,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-match" class="full search">
-<pre><code contenteditable>{
+<pre><code class="highlight" contenteditable>{
   "query": {
     "match": {
       "title": "Nederland"
@@ -146,7 +141,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-bool" class="full search">
-<pre><code contenteditable>{
+<pre><code class="highlight" contenteditable>{
   "query": {
     "bool": {
       "must": [
@@ -167,7 +162,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-all" class="full search">
-<pre><code contenteditable>{
+<pre><code class="highlight" contenteditable>{
   "query": {
     "match": {
       "_all": {
@@ -180,7 +175,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-term" class="full search">
-<pre><code contenteditable>{
+<pre><code class="highlight" contenteditable>{
   "query": {
     "term": {
       "costs": false
@@ -190,7 +185,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-range" class="full search">
-<pre><code contenteditable>{
+<pre><code class="highlight" contenteditable>{
   "query": {
     "range": {
       "duration": {
@@ -203,7 +198,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-filters" class="full search">
-<pre><code contenteditable>{
+<pre><code class="highlight" contenteditable>{
   "query": {
     "match": {
       "title": "Nederland"
@@ -221,7 +216,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-paging" class="full search">
-<pre><code contenteditable>{
+<pre><code class="highlight" contenteditable>{
   "query": {
     "match": {
       "title": "Nederland"
@@ -274,9 +269,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 <section id="search-facets-terms2" class="full search">
 <pre><code class="highlight" contenteditable>{
   "query": {
-    "match": {
-      "title": "Nederland"
-    }
+    "match_all": {}
   },
   "size": 0,
   "facets": {
@@ -333,9 +326,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 <section id="search-facets-terms3" class="full search">
 <pre><code class="highlight" contenteditable>{
   "query": {
-    "match": {
-      "title": "Nederland"
-    }
+    "match_all": {}
   },
   "size": 0,
   "facets": {

@@ -7,17 +7,29 @@ $ ->
         $(this).html( highlight(JSON.parse($(this).text())) )
 
     $('#indexing button').click (event) ->
-        slide = $(this).parents('section')
-        code = $('code', slide).empty()
+        block = $(this).parents('pre')
+        $.ajax
+            url: $(this).data('url')
+            type: 'POST'
+            success: (data) ->
+                console.log('hoi')
+                $('code.result', block).html(data).addClass('visible')
 
-        socket = new WebSocket(slide.data('url'))
+    $('#mapping button').click (event) ->
+        block = $(this).parents('pre')
+        $.ajax
+            url: $('body').data('url') + '/edurep/lom/_mapping'
+            success: (data) ->
+                $('code.result', block).html( highlight(data) ).addClass('visible')
 
-        socket.onopen = (event) ->
-            socket.send('index')
-
-        socket.onmessage = (event) ->
-            current = code.text()
-            code.text(event.data + '\n' + current)
+    $('#indexing-lom button').click (event) ->
+        block = $(this).parents('pre')
+        $.ajax
+            url: $('body').data('url') + '/edurep/lom'
+            type: 'POST'
+            data: $('code.data', block).text()
+            success: (data) ->
+                $('code.result', block).html( highlight(data) ).addClass('visible')
 
     $('#put-mapping button.put').click (event) ->
         block = $(this).parents('pre')
@@ -111,14 +123,3 @@ Reveal.addEventListener 'fragmenthidden', (event) ->
     state = fragment.data('state')
     slide.removeClass(state) if state
     handler(event)
-
-Reveal.addEventListener 'slidechanged', (event) ->
-    slide = $(event.currentSlide)
-
-    switch slide.attr('id')
-
-        when 'mapping'
-            $.ajax
-                url: $('body').data('url') + '/edurep/lom/_mapping'
-                success: (data) ->
-                    $('code', slide).html( highlight(data) )

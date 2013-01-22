@@ -7,7 +7,7 @@ import play.api.mvc._
 
 object Application extends Controller {
 
-    def index = Action { implicit request =>
+    def sheets = Action { implicit request =>
         Async {
             ElasticSearch.httpAddress.map { address =>
                 val entry = storage.entries.head
@@ -18,6 +18,11 @@ object Application extends Controller {
                 ))
             }
         }
+    }
+
+    def index = Action {
+        ElasticSearch.indexLoms()
+        Ok("done")
     }
 
     def index2 = Action {
