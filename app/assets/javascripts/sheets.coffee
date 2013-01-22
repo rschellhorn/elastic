@@ -11,9 +11,10 @@ $ ->
         $.ajax
             url: $(this).data('url')
             type: 'POST'
+            beforeSend: ->
+                $('code.result', block).addClass('visible')
             success: (data) ->
-                console.log('hoi')
-                $('code.result', block).html(data).addClass('visible')
+                $('code.result', block).html(data)
 
     $('#mapping button').click (event) ->
         block = $(this).parents('pre')
@@ -28,6 +29,14 @@ $ ->
             url: $('body').data('url') + '/edurep/lom'
             type: 'POST'
             data: $('code.data', block).text()
+            success: (data) ->
+                $('code.result', block).html( highlight(data) ).addClass('visible')
+                $('#get span.lomId').html(data._id)
+
+    $('#get button').click (event) ->
+        block = $(this).parents('pre')
+        $.ajax
+            url: $('body').data('url') + '/edurep/lom/' + $('span.lomId', block).text()
             success: (data) ->
                 $('code.result', block).html( highlight(data) ).addClass('visible')
 

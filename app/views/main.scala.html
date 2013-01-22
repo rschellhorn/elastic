@@ -115,6 +115,9 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 <section id="indexing-lom">
                     <pre><code>curl -XPOST http://localhost:9200/edurep/lom -d '</code><code class="data highlight">@lomAsJson</code><code>'</code><code class="result"></code><button>Go</button></pre>
                 </section>
+                <section id="get" class="scripts">
+                    <pre><code>curl -XGET http://localhost:9200/edurep/lom/<span class="lomId">{id}</span></code><code class="result"></code><button>Go</button></pre>
+                </section>
                 <section id="indexing">
                     <pre><code>Indexeer de eerste 10k LOMs</code><code class="result"></code><button data-url="@routes.Application.index()">Go</button></pre>
                 </section>
@@ -339,6 +342,40 @@ $ elasticsearch-0.20.2/bin/elasticsearch
 }</code></pre>
                     <pre class="fragment result"><code></code></pre>
                 </section>
+                <section id="put-mapping2" class="scripts">
+<pre><code>curl -XPOST http://localhost:9200/edurep3 -d '</code><code class="data highlight">{
+  "mappings": {
+    "lom": {
+      "properties": {
+        "context": {
+          "type": "string",
+          "index" : "not_analyzed"
+        },
+        "costs": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string",
+          "analyzer": "dutch"
+        },
+        "duration": {
+          "type": "long"
+        },
+        "keyword": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string",
+          "analyzer": "dutch"
+        }
+      }
+    }
+  }
+}</code><code>'</code><code class="result"></code><button class="put">Go</button></pre>
+                </section>
             </div>
         </div>
         <script src="@routes.Assets.at("reveal.js/lib/js/head.min.js")"></script>
@@ -350,17 +387,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 history: true,
                 overview: true,
                 progress: false,
-                rollingLinks: false,
-                dependencies: [
-                    {
-                        src: '@routes.Assets.at("reveal.js/plugin/highlight/highlight.js")',
-                        async: true,
-                        callback: function() {
-                            hljs.tabReplace = 2;
-                            hljs.initHighlightingOnLoad();
-                        }
-                    }
-                ]
+                rollingLinks: false
             });
         </script>
         <script src="@routes.Assets.at("javascripts/sheets.js")"></script>
