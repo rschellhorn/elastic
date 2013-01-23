@@ -32,11 +32,20 @@ $ ->
             success: (data) ->
                 $('code.result', block).html( highlight(data) ).addClass('visible')
                 $('#get span.lomId').html(data._id)
+                $('#delete span.lomId').html(data._id)
 
     $('#get button').click (event) ->
         block = $(this).parents('pre')
         $.ajax
             url: $('body').data('url') + '/edurep/lom/' + $('span.lomId', block).text()
+            success: (data) ->
+                $('code.result', block).html( highlight(data) ).addClass('visible')
+
+    $('#delete button').click (event) ->
+        block = $(this).parents('pre')
+        $.ajax
+            url: $('body').data('url') + '/edurep/lom/' + $('span.lomId', block).text()
+            type: 'DELETE'
             success: (data) ->
                 $('code.result', block).html( highlight(data) ).addClass('visible')
 
@@ -104,6 +113,34 @@ $ ->
             success: (data) ->
                 $('code.result', pre).html( highlight(data) ).addClass('visible')
 
+    $('#put-mapping3 button.put').click (event) ->
+        block = $(this).parents('pre')
+        $.ajax
+            url: $('body').data('url') + '/edurep4'
+            type: 'POST'
+            data: $('code.data', block).text()
+            success: (data) ->
+                $('code.result', block).html( highlight(data) ).addClass('visible')
+
+    $('#reindex3 button.reindex').click (event) ->
+        block = $(this).parents('pre')
+        $.ajax
+            url: $(this).data('url')
+            type: 'POST'
+            beforeSend: ->
+                $('code.result', block).addClass('visible')
+            success: (data) ->
+                $('code.result', block).html(data)
+
+    $('#reindex3  button.alias').click (event) ->
+        pre = $(this).parents('pre')
+        $.ajax
+            url: $('body').data('url') + '/_aliases'
+            type: 'POST'
+            data: $('code.data', pre).text()
+            success: (data) ->
+                $('code.result', pre).html( highlight(data) ).addClass('visible')
+
 handler = (event) ->
 
     fragment = $(event.fragment)
@@ -156,6 +193,8 @@ Reveal.addEventListener 'fragmentshown', (event) ->
             data: fragment.prev('pre').text()
             success: (data) ->
                 $('code', fragment).html( highlight(data) )
+            error: (xhr) ->
+                $('code', fragment).html( highlight(JSON.parse(xhr.responseText)) )
 
     handler(event)
 
