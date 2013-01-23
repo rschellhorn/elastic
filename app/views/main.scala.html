@@ -124,8 +124,8 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 <section id="indexing">
                     <pre><code>Indexeer de eerste 10k LOMs</code><code class="result"></code><button data-url="@routes.Application.index()">Go</button></pre>
                 </section>
-                <section id="mapping">
-                    <pre><code>curl -XGET http://localhost:9200/edurep/lom/_mapping</code><code class="result"></code><button>Go</button></pre>
+                <section id="mapping" class="scripts">
+                    <pre><code>curl -XGET http://localhost:9200/edurep/lom/_mapping</code><code class="result"></code><button class="get" data-url="@node/edurep/lom/_mapping">Go</button></pre>
                 </section>
                 <section id="search" class="full search">
 <pre><code class="highlight" contenteditable="true">{
@@ -517,6 +517,127 @@ $ elasticsearch-0.20.2/bin/elasticsearch
   ]
 }</code></pre>
                     <pre class="fragment result"><code></code></pre>
+                </section>
+                <section id="autocomplete">
+                    <h3>Autocomplete</h3>
+                    <p>Niet één oplossing</p>
+                    <p class="fragment">nGram</p>
+                    <dl class="fragment">
+                        <dt>brandweer</dt>
+                        <dd>br</dd>
+                        <dd>bra</dd>
+                        <dd>bran</dd>
+                        <dd>brand</dd>
+                        <dd>brandw</dd>
+                        <dd>brandwe</dd>
+                        <dd>brandwee</dd>
+                        <dd>brandweer</dd>
+                    </dl>
+                </section>
+                <section id="put-mapping4" class="scripts">
+<pre><code>curl -XPOST http://localhost:9200/edurep5 -d '</code><code class="data highlight">{
+  "settings": {
+    "index": {
+      "analysis" : {
+        "filter" : {
+          "autocomplete_filter": {
+            "type": "edgeNGram",
+            "side": "front",
+            "min_gram": 2,
+            "max_gram": 8
+          }
+        },
+        "analyzer": {
+          "autocomplete_analyzer": {
+            "type": "custom",
+            "tokenizer": "keyword",
+            "filter": [ "lowercase", "autocomplete_filter" ]
+          }
+        }
+      }
+    }
+  },
+  "mappings": {
+    "lom": {
+      "properties": {
+        "context": {
+          "type": "string",
+          "index" : "not_analyzed"
+        },
+        "costs": {
+          "type": "boolean"
+        },
+        "description": {
+          "type": "string",
+          "analyzer": "dutch",
+          "store": "yes",
+          "term_vector": "with_positions_offsets"
+        },
+        "duration": {
+          "type": "long"
+        },
+        "keyword": {
+          "type": "string",
+          "analyzer": "dutch",
+          "boost": 4
+        },
+        "repository": {
+          "type": "string",
+          "index" : "not_analyzed"
+        },
+        "title": {
+          "type" : "multi_field",
+          "fields" : {
+            "title": {
+              "type": "string",
+              "analyzer": "dutch",
+              "boost": 2,
+              "store": "yes",
+              "term_vector": "with_positions_offsets"
+            },
+            "untouched": {
+              "type" : "string",
+              "index" : "not_analyzed"
+            },
+            "autocomplete": {
+              "type": "string",
+              "index_analyzer": "autocomplete_analyzer",
+              "search_analyzer": "dutch"
+            }
+          }
+        }
+      }
+    }
+  }
+}</code><code>'</code><code class="result"></code><button class="put">Go</button></pre>
+                </section>
+                <section id="reindex4" class="scripts">
+                    <pre><code>Herindexeer edurep &rarr; edurep5</code><code class="result"></code><button class="reindex" data-url="@routes.Application.reindex("edurep5")">Go</button></pre>
+                    <pre class="fragment"><code>curl -XPOST http://localhost:9200/_aliases -d '</code><code class="data highlight">{
+  "actions": [
+    { "remove" : { "index" : "edurep4", "alias" : "edurep" } },
+    { "add" : { "index" : "edurep5", "alias" : "edurep" } }
+  ]
+}</code><code>'</code><code class="result"></code><button class="alias">Go</button></pre>
+                </section>
+                <section id="autocomplete-example">
+                    <pre><code class="highlight">{
+  "query": {
+    "match": {
+      "title.autocomplete": "some text"
+    }
+  }
+}</code></pre>
+                    <div class="wrap">
+                        <input type="text" autocomplete="off" />
+                        <ol class="suggestions"></ol>
+                    </div>
+                </section>
+                <section id="health" class="scripts">
+                    <pre><code>curl -XGET http://localhost:9200/_cluster/health</code><code class="result"></code><button class="get" data-url="@node/_cluster/health">Go</button></pre>
+                </section>
+                <section id="settings" class="scripts">
+                    <pre><code>curl -XGET http://localhost:9200/_settings</code><code class="result"></code><button class="get" data-url="@node/_settings">Go</button></pre>
                 </section>
             </div>
         </div>

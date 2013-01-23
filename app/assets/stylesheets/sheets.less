@@ -78,6 +78,47 @@
                 }
             }
 
+            &#autocomplete-example {
+                .wrap {
+                    position: relative;
+                    input {
+                        border: 3px solid #0093D1;
+                        border-radius: 5px;
+                        font-size: 20px;
+                        line-height: 1.5em;
+                        outline: none;
+                        width: 300px;
+                    }
+                    ol.suggestions {
+                        background: #FFF;
+                        border: 3px solid #0093D1;
+                        color: #000;
+                        display: none;
+                        font-size: 18px;
+                        line-height: 1.5em;
+                        position: absolute;
+                        left: 0;
+                        top: 47px;
+                        list-style: none;
+                        margin: 0;
+                        width: 300px;
+                        &.visible {
+                            display: block;
+                        }
+                        li {
+                            border-top: 3px solid #0093D1;
+                            padding: 0 5px;
+                            &:first-child {
+                                border-top: 0;
+                            }
+                            em {
+                                background: #FF5E99;
+                            }
+                        }
+                    }
+                }
+            }
+
             &.scripts {
                 pre {
                     margin-bottom: 2em;

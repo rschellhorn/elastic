@@ -16,13 +16,6 @@ $ ->
             success: (data) ->
                 $('code.result', block).html(data)
 
-    $('#mapping button').click (event) ->
-        block = $(this).parents('pre')
-        $.ajax
-            url: $('body').data('url') + '/edurep/lom/_mapping'
-            success: (data) ->
-                $('code.result', block).html( highlight(data) ).addClass('visible')
-
     $('#indexing-lom button').click (event) ->
         block = $(this).parents('pre')
         $.ajax
@@ -140,6 +133,69 @@ $ ->
             data: $('code.data', pre).text()
             success: (data) ->
                 $('code.result', pre).html( highlight(data) ).addClass('visible')
+
+    $('section.scripts button.get').click ->
+        block = $(this).parents('pre')
+        $.ajax
+            url: $(this).data('url')
+            success: (data) ->
+                $('code.result', block).html( highlight(data) ).addClass('visible')
+
+    $('#put-mapping4 button.put').click (event) ->
+        block = $(this).parents('pre')
+        $.ajax
+            url: $('body').data('url') + '/edurep5'
+            type: 'POST'
+            data: $('code.data', block).text()
+            success: (data) ->
+                $('code.result', block).html( highlight(data) ).addClass('visible')
+
+    $('#reindex4 button.reindex').click (event) ->
+        block = $(this).parents('pre')
+        $.ajax
+            url: $(this).data('url')
+            type: 'POST'
+            beforeSend: ->
+                $('code.result', block).addClass('visible')
+            success: (data) ->
+                $('code.result', block).html(data)
+
+    $('#reindex4  button.alias').click (event) ->
+        pre = $(this).parents('pre')
+        $.ajax
+            url: $('body').data('url') + '/_aliases'
+            type: 'POST'
+            data: $('code.data', pre).text()
+            success: (data) ->
+                $('code.result', pre).html( highlight(data) ).addClass('visible')
+
+    $('#autocomplete-example input').keyup ->
+        block = $(this).parents('section')
+        text = $(this).val()
+        if (text and text.length > 1)
+            $.ajax
+                url: $('body').data('url') + '/edurep/lom/_search'
+                type: 'POST'
+                data: """{
+  "query": {
+    "match": {
+      "title.autocomplete": "#{text}"
+    }
+  },
+  "fields": [],
+  "highlight": {
+    "fields" : {
+      "title.autocomplete" : {}
+    }
+  }
+}"""
+                success: (data) ->
+                    suggestions = $('ol.suggestions', block).empty().addClass('visible')
+                    $('ol.suggestions', block).empty().removeClass('visible') if data.hits.hits.length == 0
+                    $(data.hits.hits).each ->
+                        $('<li>').html(this.highlight['title.autocomplete'][0]).appendTo(suggestions)
+        else
+            $('ol.suggestions', block).empty().removeClass('visible')
 
 handler = (event) ->
 
