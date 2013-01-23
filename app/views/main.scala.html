@@ -128,7 +128,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre><code>curl -XGET http://localhost:9200/edurep/lom/_mapping</code><code class="result"></code><button>Go</button></pre>
                 </section>
                 <section id="search" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "match_all": {}
   }
@@ -137,7 +137,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-match" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "match": {
       "title": "Nederland"
@@ -147,7 +147,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-bool" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "bool": {
       "must": [
@@ -168,7 +168,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-all" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "match": {
       "_all": {
@@ -181,7 +181,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-term" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "term": {
       "costs": false
@@ -191,7 +191,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-range" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "range": {
       "duration": {
@@ -204,7 +204,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-filters" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "match": {
       "title": "Nederland"
@@ -222,7 +222,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-paging" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "match": {
       "title": "Nederland"
@@ -234,7 +234,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-facets-terms" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "match": {
       "title": "Nederland"
@@ -252,7 +252,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-facets-range" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "match_all": {}
   },
@@ -273,7 +273,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-facets-terms2" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "match_all": {}
   },
@@ -333,7 +333,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
 }</code><code>'</code><code class="result"></code><button class="alias">Go</button></pre>
                 </section>
                 <section id="search-facets-terms3" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "match_all": {}
   },
@@ -400,7 +400,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
 }</code><code>'</code><code class="result"></code><button class="alias">Go</button></pre>
                 </section>
                 <section id="search-facets-terms4" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "match_all": {}
   },
@@ -416,7 +416,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-highlight" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "size": 1,
   "query": {
     "match": {
@@ -433,7 +433,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-sort" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "match_all": {}
   },
@@ -506,7 +506,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
 }</code><code>'</code><code class="result"></code><button class="alias">Go</button></pre>
                 </section>
                 <section id="search-sort2" class="full search">
-<pre><code class="highlight" contenteditable>{
+<pre><code class="highlight" contenteditable="true">{
   "query": {
     "match_all": {}
   },

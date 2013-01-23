@@ -194,7 +194,7 @@ Reveal.addEventListener 'fragmentshown', (event) ->
             success: (data) ->
                 $('code', fragment).html( highlight(data) )
             error: (xhr) ->
-                $('code', fragment).html( highlight(JSON.parse(xhr.responseText)) )
+                $('code', fragment).text( JSON.parse(xhr.responseText).error )
 
     handler(event)
 
