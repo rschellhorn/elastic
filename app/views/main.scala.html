@@ -205,11 +205,6 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 </section>
                 <section id="search-filters" class="full search">
 <pre><code class="highlight" contenteditable="true">{
-  "query": {
-    "match": {
-      "title": "Nederland"
-    }
-  },
   "filter": {
     "range": {
       "duration": {
@@ -228,18 +223,13 @@ $ elasticsearch-0.20.2/bin/elasticsearch
       "title": "Nederland"
     }
   },
-  "from": 3,
-  "size": 2
+  "from": 10,
+  "size": 1
 }</code></pre>
                     <pre class="fragment result"><code></code></pre>
                 </section>
                 <section id="search-facets-terms" class="full search">
 <pre><code class="highlight" contenteditable="true">{
-  "query": {
-    "match": {
-      "title": "Nederland"
-    }
-  },
   "size": 0,
   "facets": {
     "costs": {
@@ -253,9 +243,6 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 </section>
                 <section id="search-facets-range" class="full search">
 <pre><code class="highlight" contenteditable="true">{
-  "query": {
-    "match_all": {}
-  },
   "size": 0,
   "facets": {
     "durations": {
@@ -274,9 +261,6 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 </section>
                 <section id="search-facets-terms2" class="full search">
 <pre><code class="highlight" contenteditable="true">{
-  "query": {
-    "match_all": {}
-  },
   "size": 0,
   "facets": {
     "contexts": {
@@ -334,9 +318,6 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 </section>
                 <section id="search-facets-terms3" class="full search">
 <pre><code class="highlight" contenteditable="true">{
-  "query": {
-    "match_all": {}
-  },
   "size": 0,
   "facets": {
     "contexts": {
@@ -401,9 +382,6 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 </section>
                 <section id="search-facets-terms4" class="full search">
 <pre><code class="highlight" contenteditable="true">{
-  "query": {
-    "match_all": {}
-  },
   "size": 0,
   "facets": {
     "words": {
@@ -434,9 +412,6 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 </section>
                 <section id="search-sort" class="full search">
 <pre><code class="highlight" contenteditable="true">{
-  "query": {
-    "match_all": {}
-  },
   "sort" : [
     {
       "title": {}
@@ -507,9 +482,6 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 </section>
                 <section id="search-sort2" class="full search">
 <pre><code class="highlight" contenteditable="true">{
-  "query": {
-    "match_all": {}
-  },
   "sort" : [
     {
       "title.untouched": {}
@@ -521,7 +493,7 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 <section id="autocomplete">
                     <h3>Autocomplete</h3>
                     <p>Niet één oplossing</p>
-                    <p class="fragment">nGram</p>
+                    <p class="fragment">Edge nGram</p>
                     <dl class="fragment">
                         <dt>brandweer</dt>
                         <dd>br</dd>
@@ -638,6 +610,13 @@ $ elasticsearch-0.20.2/bin/elasticsearch
                 </section>
                 <section id="settings" class="scripts">
                     <pre><code>curl -XGET http://localhost:9200/_settings</code><code class="result"></code><button class="get" data-url="@node/_settings">Go</button></pre>
+                </section>
+                <section id="es-head">
+                    <p><q>A web front end for an ElasticSearch cluster</q></p>
+                    <a href="https://github.com/Aconex/elasticsearch-head">elasticsearch-head</a>
+                </section>
+                <section id="done">
+                    <h1>Hands-on</h1>
                 </section>
             </div>
         </div>
